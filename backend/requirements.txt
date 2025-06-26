@@ -1,0 +1,13 @@
+numpy
+pandas
+matplotlib
+yfinance
+torch
+scikit-learn
+mplfinance
+talib-binary
+optuna
+joblib
+requests
+nltk
+pyarrow 

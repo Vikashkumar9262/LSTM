@@ -1,1 +1,5 @@
 node_modules/
+# Project specific
+data_cache/
+models/
+YOUR_NEWS_API_KEY
