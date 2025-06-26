@@ -5,7 +5,6 @@ yfinance
 torch
 scikit-learn
 mplfinance
-TA-Lib
 optuna
 joblib
 requests

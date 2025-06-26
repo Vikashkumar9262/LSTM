@@ -11,28 +11,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install TA-Lib from source
+# Upgrade pip and setuptools first for better compatibility
+RUN pip install --no-cache-dir -U pip setuptools
+
+# --- Install TA-Lib in a single, isolated step ---
+# This is the most reliable method. It builds the C library and then immediately
+# installs the Python wrapper in the same execution layer.
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
-    tar -xvzf ta-lib-0.4.0-src.tar.gz && \
-    cd ta-lib/ && \
+    tar -xzf ta-lib-0.4.0-src.tar.gz && \
+    cd ta-lib && \
     ./configure --prefix=/usr && \
     make && \
     make install && \
     cd .. && \
-    rm -rf ta-lib*
+    rm -rf ta-lib* && \
+    pip install TA-Lib
 
-# Set standard C compiler flags to find the TA-Lib headers and library.
-# This is a more robust method than using package-specific ENV VARS.
-ENV CFLAGS="-I/usr/include/ta-lib"
-ENV LDFLAGS="-L/usr/lib"
-
-# Copy the requirements file into the container
+# Now, copy and install the rest of the dependencies
 COPY ./requirements.txt /code/requirements.txt
-
-# Install Python dependencies
-# Upgrade pip and setuptools first for better compatibility
-RUN pip install --no-cache-dir -U pip setuptools
-# Now, install the requirements. The C compiler will use CFLAGS and LDFLAGS.
 RUN pip install --no-cache-dir -r /code/requirements.txt
 
 # Copy the rest of the backend application code into the container
