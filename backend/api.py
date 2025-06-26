@@ -182,18 +182,30 @@ async def get_prediction(ticker: str = Form("RELIANCE.NS")):
 def get_historical(
     ticker: str = Query(..., description="Stock ticker"),
     start: str = Query(..., description="Start date YYYY-MM-DD"),
-    end: str = Query(..., description="End date YYYY-MM-DD")
+    end: str = Query(..., description="End date YYYY-MM-DD"),
+    chartType: str = Query("area", description="Chart type: area or candlestick")
 ) -> List[Dict]:
     import yfinance as yf
     import pandas as pd
 
     df = yf.download(ticker, start=start, end=end)
     df = df.reset_index()
-    # Format for lightweight-charts: [{ time: 'YYYY-MM-DD', value: close }, ...]
-    data = [
-        {"time": row["Date"].strftime("%Y-%m-%d"), "value": row["Close"]}
-        for _, row in df.iterrows()
-    ]
+    if chartType == "candlestick":
+        data = [
+            {
+                "time": row["Date"].strftime("%Y-%m-%d"),
+                "open": row["Open"],
+                "high": row["High"],
+                "low": row["Low"],
+                "close": row["Close"],
+            }
+            for _, row in df.iterrows()
+        ]
+    else:
+        data = [
+            {"time": row["Date"].strftime("%Y-%m-%d"), "value": row["Close"]}
+            for _, row in df.iterrows()
+        ]
     return data
 
 # To run this app:
