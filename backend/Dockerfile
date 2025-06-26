@@ -21,6 +21,10 @@ RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
     cd .. && \
     rm -rf ta-lib*
 
+# Add the TA-Lib library paths to the environment so the Python wrapper can find it
+ENV TA_INCLUDE_PATH=/usr/include
+ENV TA_LIBRARY_PATH=/usr/lib
+
 # Copy the requirements file into the container
 COPY ./requirements.txt /code/requirements.txt
 
