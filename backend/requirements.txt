@@ -10,4 +10,7 @@ optuna
 joblib
 requests
 nltk
-pyarrow 
+pyarrow
+fastapi
+uvicorn[standard]
+python-multipart 

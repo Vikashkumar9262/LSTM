@@ -34,8 +34,8 @@ class Config:
     EPOCHS = 150
     LEARNING_RATE = 0.001
     PATIENCE = 10
-    MODEL_BASE_PATH = "models"
-    CACHE_DIR = "data_cache"
+    MODEL_BASE_PATH = "backend/models"
+    CACHE_DIR = "backend/data_cache"
     NEWS_API_URL = "https://newsapi.org/v2/everything"
     NEWS_API_KEY = "YOUR_NEWS_API_KEY"  # Replace with your News API key
     CHUNK_SIZE = 10000
