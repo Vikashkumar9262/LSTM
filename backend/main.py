@@ -37,7 +37,7 @@ class Config:
     MODEL_BASE_PATH = "backend/models"
     CACHE_DIR = "backend/data_cache"
     NEWS_API_URL = "https://newsapi.org/v2/everything"
-    NEWS_API_KEY = "YOUR_NEWS_API_KEY"  # Replace with your News API key
+    NEWS_API_KEY = "a2a4046a48d74545a3cfa5717ac6185a"  # Replace with your News API key
     CHUNK_SIZE = 10000
 
     def __init__(self, ticker=None):

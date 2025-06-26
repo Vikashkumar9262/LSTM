@@ -1,88 +1,40 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, ColorType } from 'lightweight-charts';
+import { createChart, IChartApi } from 'lightweight-charts';
 
-interface StockData {
-  time: string | number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-}
-
-interface VolumeData {
-  time: string | number;
+interface ChartData {
+  time: string; // 'YYYY-MM-DD'
   value: number;
-  color?: string;
 }
 
 interface StockChartProps {
-  data: StockData[];
-  volumeData: VolumeData[];
+  data: ChartData[];
+  width?: number;
+  height?: number;
 }
 
-const StockChart: React.FC<StockChartProps> = ({ data, volumeData }) => {
+const StockChart: React.FC<StockChartProps> = ({ data, width = 600, height = 300 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<IChartApi | null>(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    const handleResize = () => {
-      if (chartContainerRef.current) {
-        chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-      }
-    };
+    // Clean up previous chart
+    if (chartRef.current) {
+      chartRef.current.remove();
+    }
 
-    const chart = createChart(chartContainerRef.current, {
-      layout: {
-        textColor: 'black',
-        background: { type: ColorType.Solid, color: 'white' },
-      },
-      width: chartContainerRef.current.clientWidth,
-      height: 400,
-    });
-
-    chart.timeScale().fitContent();
-
-    const candlestickSeries = chart.addCandlestickSeries({
-      upColor: '#26a69a',
-      downColor: '#ef5350',
-      borderVisible: false,
-      wickColor: '#737375',
-      wickUpColor: '#26a69a',
-      wickDownColor: '#ef5350',
-    });
-
-    candlestickSeries.setData(data);
-
-    const volumeSeries = chart.addHistogramSeries({
-      color: '#26a69a',
-      lineWidth: 2,
-      priceFormat: {
-        type: 'volume',
-      },
-      overlay: true,
-      scaleMargins: {
-        top: 0.8,
-        bottom: 0,
-      },
-    });
-
-    volumeSeries.setData(volumeData);
-
-    window.addEventListener('resize', handleResize);
+    chartRef.current = createChart(chartContainerRef.current, { width, height });
+    // Use addSeries with type 'Line' and cast as any to avoid type issues
+    const lineSeries = chartRef.current.addSeries({ type: 'Line' } as any);
+    lineSeries.setData(data);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      chart.remove();
+      chartRef.current?.remove();
     };
-  }, [data, volumeData]);
+  }, [data, width, height]);
 
-  return (
-    <div
-      ref={chartContainerRef}
-      style={{ width: '100%', height: '400px' }}
-    />
-  );
+  return <div ref={chartContainerRef} />;
 };
 
 export default StockChart;

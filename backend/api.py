@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import numpy as np
@@ -10,6 +10,7 @@ import os
 import requests
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
+from typing import List, Dict
 
 # Assuming the model and other scripts are in the same directory or accessible
 # We will need to refactor the training script to make components reusable
@@ -176,6 +177,24 @@ async def get_prediction(ticker: str = Form("RELIANCE.NS")):
         raise HTTPException(status_code=404, detail=f"Model for {ticker} not found. Please train the model first by running the main.py script.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/historical")
+def get_historical(
+    ticker: str = Query(..., description="Stock ticker"),
+    start: str = Query(..., description="Start date YYYY-MM-DD"),
+    end: str = Query(..., description="End date YYYY-MM-DD")
+) -> List[Dict]:
+    import yfinance as yf
+    import pandas as pd
+
+    df = yf.download(ticker, start=start, end=end)
+    df = df.reset_index()
+    # Format for lightweight-charts: [{ time: 'YYYY-MM-DD', value: close }, ...]
+    data = [
+        {"time": row["Date"].strftime("%Y-%m-%d"), "value": row["Close"]}
+        for _, row in df.iterrows()
+    ]
+    return data
 
 # To run this app:
 # uvicorn backend.api:app --reload --port 8000
