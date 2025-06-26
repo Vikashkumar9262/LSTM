@@ -21,10 +21,10 @@ RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
     cd .. && \
     rm -rf ta-lib*
 
-# Add the TA-Lib library paths to the environment.
-# The header files are in /usr/include/ta-lib
-ENV TA_INCLUDE_PATH=/usr/include/ta-lib
-ENV TA_LIBRARY_PATH=/usr/lib
+# Set standard C compiler flags to find the TA-Lib headers and library.
+# This is a more robust method than using package-specific ENV VARS.
+ENV CFLAGS="-I/usr/include/ta-lib"
+ENV LDFLAGS="-L/usr/lib"
 
 # Copy the requirements file into the container
 COPY ./requirements.txt /code/requirements.txt
@@ -32,7 +32,7 @@ COPY ./requirements.txt /code/requirements.txt
 # Install Python dependencies
 # Upgrade pip and setuptools first for better compatibility
 RUN pip install --no-cache-dir -U pip setuptools
-# Now, install the requirements. The TA-Lib package will find the C headers.
+# Now, install the requirements. The C compiler will use CFLAGS and LDFLAGS.
 RUN pip install --no-cache-dir -r /code/requirements.txt
 
 # Copy the rest of the backend application code into the container
