@@ -1,5 +1,5 @@
-# Use an official Python runtime as a parent image
-FROM python:3.11-slim
+# Use a full Python runtime image to ensure all build dependencies are present
+FROM python:3.11-bullseye
 
 # Set the working directory in the container
 WORKDIR /code
