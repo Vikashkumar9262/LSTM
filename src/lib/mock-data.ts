@@ -13,6 +13,20 @@ export const mockStocks: Stock[] = [
   { ticker: 'JNJ', name: 'Johnson & Johnson', price: 148.95, change: -0.25, changePercent: -0.17, marketCap: '358B', sector: 'Healthcare', volume: '7.5M' },
 ];
 
+export const mockIndianStocks: Stock[] = [
+  { ticker: 'RELIANCE.NS', name: 'Reliance Industries Ltd.', price: 2843.05, change: -1.25, changePercent: -0.04, marketCap: '19.23T', sector: 'Energy', volume: '6.9M' },
+  { ticker: 'TCS.NS', name: 'Tata Consultancy Services Ltd.', price: 3821.90, change: 10.05, changePercent: 0.26, marketCap: '13.84T', sector: 'Technology', volume: '2.1M' },
+  { ticker: 'HDFCBANK.NS', name: 'HDFC Bank Ltd.', price: 1658.90, change: -1.85, changePercent: -0.11, marketCap: '12.63T', sector: 'Financial Services', volume: '15.3M' },
+  { ticker: 'INFY.NS', name: 'Infosys Ltd.', price: 1523.80, change: -5.05, changePercent: -0.33, marketCap: '6.37T', sector: 'Technology', volume: '5.8M' },
+  { ticker: 'HINDUNILVR.NS', name: 'Hindustan Unilever Ltd.', price: 2450.00, change: -11.95, changePercent: -0.49, marketCap: '5.76T', sector: 'Consumer Staples', volume: '1.2M' },
+  { ticker: 'ICICIBANK.NS', name: 'ICICI Bank Ltd.', price: 1121.25, change: 2.95, changePercent: 0.26, marketCap: '7.88T', sector: 'Financial Services', volume: '14.1M' },
+  { ticker: 'SBIN.NS', name: 'State Bank of India', price: 833.95, change: 1.90, changePercent: 0.23, marketCap: '7.44T', sector: 'Financial Services', volume: '18.9M' },
+  { ticker: 'BAJFINANCE.NS', name: 'Bajaj Finance Ltd.', price: 7243.55, change: -3.40, changePercent: -0.05, marketCap: '4.49T', sector: 'Financial Services', volume: '1.1M' },
+  { ticker: 'BHARTIARTL.NS', name: 'Bharti Airtel Ltd.', price: 1414.90, change: -3.85, changePercent: -0.27, marketCap: '8.52T', sector: 'Communication Services', volume: '8.1M' },
+  { ticker: 'KOTAKBANK.NS', name: 'Kotak Mahindra Bank Ltd.', price: 1779.85, change: 1.45, changePercent: 0.08, marketCap: '3.54T', sector: 'Financial Services', volume: '3.4M' },
+];
+
+
 const generateChartData = (days: number, startPrice: number, volatility: number): ChartDataPoint[] => {
   const data: ChartDataPoint[] = [];
   let currentDate = new Date();

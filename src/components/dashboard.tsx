@@ -4,10 +4,12 @@ import type { Stock } from '@/lib/types';
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import StockChart from '@/components/stock-chart';
-import { mockStocks, chartData as initialChartData } from '@/lib/mock-data';
+import { mockStocks, mockIndianStocks, chartData as initialChartData } from '@/lib/mock-data';
 import { ArrowDown, ArrowUp, Plus, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { Switch } from './ui/switch';
+import { Label } from './ui/label';
 
 interface DashboardProps {
   watchlist: Stock[];
@@ -55,12 +57,29 @@ const QuoteCard = ({ stock: initialStock }: { stock: Stock }) => {
 };
 
 export default function Dashboard({ watchlist, removeFromWatchlist }: DashboardProps) {
+  const [market, setMarket] = useState<'US' | 'Indian'>('US');
   const [selectedStock, setSelectedStock] = useState<Stock>(mockStocks[0]);
+  
+  const stocks = market === 'US' ? mockStocks : mockIndianStocks;
+
+  useEffect(() => {
+    setSelectedStock(stocks[0]);
+  }, [market, stocks]);
+
 
   return (
     <div className="flex flex-col gap-6">
+       <div className="flex items-center space-x-2">
+        <Label htmlFor="market-switch">US</Label>
+        <Switch
+          id="market-switch"
+          checked={market === 'Indian'}
+          onCheckedChange={(checked) => setMarket(checked ? 'Indian' : 'US')}
+        />
+        <Label htmlFor="market-switch">Indian</Label>
+      </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {mockStocks.slice(0, 4).map(stock => (
+        {stocks.slice(0, 4).map(stock => (
           <QuoteCard key={stock.ticker} stock={stock} />
         ))}
       </div>
